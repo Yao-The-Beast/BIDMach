@@ -1,0 +1,14 @@
+// Script to test out BayesNet.scala for factor graphs.
+
+val data = loadFMat("data/factorNet/test2/data.txt")
+val dagDense = loadIMat("data/factorNet/test2/factorSet.txt")
+val states = loadIMat("data/factorNet/test2/statePerNode.txt")
+val dag = sparse(dagDense)
+
+val (nn , opts) = BIDMach.models.BayesNet.learner(states , dag , true , data)
+opts.npasses = 50
+opts.useGPU = false
+opts.batchSize = 10
+opts.what
+nn.train
+nn.modelmats(0).t

@@ -1,0 +1,17 @@
+
+val dd= loadSMat("../data/uci/nytimes.smat.lz4");
+
+val (nn,opts)=LDAgibbs.learner(dd)
+
+opts.dim=128;
+opts.uiter=5;
+opts.batchSize=1024;
+opts.npasses=1;
+opts.useBino=true;
+opts.doDirichlet=true;
+opts.alpha=0.2f;
+opts.doAlpha=true;
+opts.nsamps=100;
+opts.power=0.5f;
+
+nn.train

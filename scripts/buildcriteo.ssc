@@ -1,0 +1,87 @@
+val ntrain = 92
+val ntest = 13
+
+val maxrange = 20000000
+
+val dir = "../data/criteo/parts/";
+val ivals = new Array[IMat](26);
+val mvals = new Array[IMat](26);
+println("Building feature lookup tables")
+for (i <- 0 until (ntrain+ntest)) {
+  val a= if (i < ntrain) { 
+    loadIMat(dir+("traindata%02d.imat.lz4" format i));
+  } else { 
+    loadIMat(dir+("testdata%02d.imat.lz4" format i-ntrain));
+  }
+  for (j <- 0 until 26) { 
+    if (i == 0) { 
+      ivals(j) = unique(a(13+j,?).t);
+    } else { 
+      ivals(j) = unique(a(13+j,?).t on ivals(j));
+    }
+  }
+  print(".")
+}
+println("")
+println("Building feature matrices");
+
+val dicts = ivals.map(IDict(_));
+val offsets = izeros(27,1);
+for (i <- 0 until 26) { 
+    offsets(i+1) = offsets(i) + math.min(ivals(i).length, maxrange);
+}
+println("feature number %d" format (offsets(offsets.length-1)));
+
+for (i <- 0 until (ntrain+ntest)) {
+  val (a,b)= if (i < ntrain) { 
+    (loadIMat(dir+("traindata%02d.imat.lz4" format i)),
+     loadIMat(dir+("trainnz%02d.imat.lz4" format i)));
+  } else { 
+    (loadIMat(dir+("testdata%02d.imat.lz4" format i-ntrain)),
+     loadIMat(dir+("testnz%02d.imat.lz4" format i-ntrain)));
+  }
+  val a0 = a(0->13,?);
+  val b0 = b(0->13,?);
+  val a1 = a(13->39,?);
+  val b1 = b(13->39,?);
+  val nnz = sum(sum(b1)).v;
+  val rows = IMat(nnz,1);
+  val cols = IMat(nnz,1);
+  val vv = ones(nnz,1);
+  for (j <- 0 until 26) { 
+    val cc = a1(j, ?).t;
+    mvals(j) = IDict(cc) --> dicts(j);
+  }
+  var ix = 0;
+  var icol = 0;
+  val ioff = Mat.ioneBased;
+  while (icol < a.ncols) { 
+    var irow = 0;
+    while (irow < a1.nrows) { 
+      if (b1(irow,icol) > 0 && mvals(irow)(icol) < maxrange) {
+        rows(ix) = offsets(irow) + mvals(irow)(icol) + ioff;
+        cols(ix) = icol;
+        ix += 1;
+      }
+      irow += 1;
+    }
+    icol += 1;
+  }
+  val ccols = BIDMat.SparseMat.compressInds(cols.data, a.ncols, new Array[Int](a.ncols+1), ix);
+  val sout = SMat(offsets(26), a.ncols, ix, rows.data, ccols, vv.data);
+  val out = sparse(iones(1, b0.ncols) on a0 on b0) on sout;
+  out.check;
+  if (i < ntrain) { 
+    saveSMat(dir+("train%02d.smat.lz4" format i), out);
+  } else { 
+    saveSMat(dir+("test%02d.smat.lz4" format i-ntrain), out);
+  }
+  print(".")
+}
+println("\nSaving dicts\n");
+
+for (i <- 0 until 26) {
+    saveIMat(dir+"dict%02d.imat.lz4" format i, dicts(i).grams)
+}
+
+System.exit(0)

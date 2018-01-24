@@ -1,0 +1,36 @@
+// Run approx. SVD on the Climate dataset
+
+val dir="/code/BIDMach/data/MNIST8M/parts/"
+val (nn, opts) = SVD.learner(dir+"data%02d.fmat.lz4");
+
+opts.nend = 10;
+opts.dim = 20;
+opts.npasses = 10;
+opts.batchSize = 10000;
+opts.useDouble = true;
+opts.pstep = 0.01f
+opts.miniBatchPasses = 1;
+opts.batchesPerUpdate = 200;
+opts.updateAll = true
+opts.lookahead = 2;
+opts.evalType = 0;
+opts.order = 1;
+opts.doRayleighRitz = false
+opts.autoReset = false
+opts.subMean = false
+//opts.traceFileSource = 1
+//opts.useGPU = false
+
+val model = nn.model.asInstanceOf[SVD]
+
+nn.train
+
+// Singular values and vectors
+
+val svals = FMat(nn.modelmats(1));
+val svecs = FMat(nn.modelmats(0));
+
+// Compute M * M^t directly to compute a reference SVD (can only do this
+// for small feature spaces).
+
+

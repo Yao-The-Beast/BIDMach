@@ -1,0 +1,17 @@
+// Script to test out BayesNet.scala for the general case.
+
+val data = loadFMat("data/factorNet/data.txt")
+val dagDense = loadIMat("data/factorNet/factorSet.txt")
+val states = loadIMat("data/factorNet/statePerNode.txt")
+
+// convert the dag to sparse
+val dag = sparse(dagDense)
+
+val (nn , opts) = BIDMach.models.BayesNet.learner(states , dag , true , data)
+opts.npasses = 2
+opts.useGPU = false
+opts.batchSize = 2
+opts.updateAll = true
+opts.what
+nn.train
+nn.modelmats(0).t

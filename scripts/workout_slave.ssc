@@ -1,0 +1,192 @@
+val dir = ".."
+val a = loadSMat(dir+"/data/rcv1/docs.smat.lz4")
+val c = loadFMat(dir+"/data/rcv1/cats.fmat.lz4")
+val ta = loadSMat(dir+"/data/rcv1/testdocs.smat.lz4")
+val tc = loadFMat(dir+"/data/rcv1/testcats.fmat.lz4")
+
+println("\n<<<<<<< Testing GLM on RCV1 (2 passes) >>>>>>>")
+val (mm1,opts1) = GLM.learnerX(a,c,1)
+opts1.batchSize=10000
+opts1.lrate = 0.02f
+opts1.useGPU=useGPU
+mm1.train
+
+val (nn1,nopts1) = GLM.predictor(mm1.model,ta)
+nopts1.useGPU=useGPU
+nn1.predict
+
+val pc = FMat(nn1.preds(0))
+
+val rc = roc2(pc, tc, 1-tc, 1000)
+val mr = mean(rc)(0, 0->100)
+val nt = sum(c,2)(0->100, 0)
+val wt = nt / sum(nt);
+println("ROC AUC: mean %5.4f, cat6 %5.4f" format ((mr*wt).dv, mr(6)))
+ 
+println("\n<<<<<<< Testing FM on RCV1 (2 passes) >>>>>>>")
+//min(a,1f,a)
+//min(ta,1f,ta)
+val c6 = c(6,?)
+val (mm2,opts2) = FM.learner(a,c6,1)
+opts2.useGPU=useGPU
+opts2.lrate = 0.03f*row(1,0,0) + 0.003f*row(0,1,1)
+opts2.reg1weight = 0.001*row(1,0,0) + 0.1*row(0,1,1)
+opts2.batchSize=2000
+opts2.addConstFeat = true
+opts2.dim1 = 32
+opts2.dim2 = 32
+//opts2.strictFM = true
+mm2.train
+
+val tc6 = tc(6,?)
+val (nn2,nopts2) = FM.predictor(mm2.model,ta)
+nopts2.useGPU=useGPU
+nopts2.batchSize=10000
+nopts2.addConstFeat = true
+nn2.predict
+val p6 = FMat(nn2.preds(0))
+val rr2 = roc(p6,tc6,1-tc6,100)
+println("ROC AUC cat6 %5.4f" format mean(rr2).dv)
+
+val a = loadSMat(dir+"/data/uci/nytimes.smat.lz4")
+
+if (useGPU && Mat.hasCUDA > 1) {
+println("\n<<<<<<< Testing parallel LDA on NYTimes (2 passes) >>>>>>>")
+val (mm4,opts4) = LDA.learnPar(a, 512)
+opts4.batchSize = 5000
+opts4.useGPU=useGPU
+opts4.nthreads = Mat.hasCUDA
+opts4.npasses=2
+mm4.train
+} else if (Mat.hasCUDA > 0) {
+println("\n<<<<<<< Testing LDA on NYTimes (2 passes) >>>>>>>")
+val (mm4,opts4) = LDA.learner(a, 128)
+opts4.useGPU=useGPU
+opts4.npasses=2
+mm4.train
+}
+
+println("\n<<<<<<< Testing SFA on MovieLens 10M Data (5 passes) >>>>>>>")
+val a5=loadSMat(dir+"/data/movielens/train.smat.lz4")
+val ta5=loadSMat(dir+"/data/movielens/test.smat.lz4")
+
+val d = 128
+
+val fact5 = zeros(d, ta5.ncols);
+val (mm5,opts5) = SFA.learner(a5,fact5,d)
+
+opts5.useGPU = useGPU
+opts5.lambdam = 0.025f
+opts5.lambdau = 1f
+opts5.regumean = 0.1f;
+opts5.uiter = 4
+opts5.npasses=5
+opts5.batchSize = 1000
+opts5.langevin = 0.3f
+
+mm5.train
+
+val (nn5,nopts5) = SFA.predictor(mm5.model,a5,fact5,ta5)
+nopts5.batchSize = 10000;
+nopts5.uiter = 3;
+
+nn5.predict
+val pa5 = SMat(nn5.preds(1))
+
+val diff = ta5.contents - pa5.contents
+val rmse = sqrt((diff ^* diff) / diff.length)
+println("RMSE = %f" format rmse.v);
+
+if ((new java.io.File("../data/MNIST8M/parts/data00.fmat.lz4")).exists) {
+println("\n<<<<<<< Testing Random Forests with FileSource on MNIST8M (depth 16) >>>>>>>")
+val (mm11,opts11) = RandomForest.learner("../data/MNIST8M/parts/data%02d.fmat.lz4","../data/MNIST8M/parts/cat%02d.imat.lz4")
+opts11.batchSize = 20000
+opts11.depth =  16
+opts11.ntrees = 8
+opts11.useGPU = useGPU
+opts11.nend = 10
+
+opts11.nsamps = 32
+opts11.nnodes = 80000
+opts11.nbits = 16
+mm11.train
+} 
+
+if ((new java.io.File("../data/uci/pubmed_parts/part00.smat.lz4")).exists) {
+println("\n<<<<<<< Testing LDA with SFileSource on Pubmed (2 passes) >>>>>>>")
+val (mm6,opts6) = LDA.learner(List((n:Int)=> ("../data/uci/pubmed_parts/part%02d.smat.lz4" format n)), 128)
+opts6.nend = 10
+opts6.npasses=2
+opts6.useGPU=useGPU
+mm6.train
+}
+
+
+if ((new java.io.File("../data/MNIST8M/parts/alls00.fmat.lz4")).exists) {
+if (useGPU && Mat.hasCUDA > 1) {
+println("\n<<<<<<< Testing parallel KMeans with FileSource on MNIST8M (4 passes) >>>>>>>")
+val (mm7,opts7) = KMeans.learnPar("../data/MNIST8M/parts/alls%02d.fmat.lz4", 4096)
+opts7.npasses=4
+opts7.nend=70
+opts7.batchSize=20000
+opts7.nthreads=Mat.hasCUDA
+mm7.train
+} else {
+println("\n<<<<<<< Testing KMeans with FileSource on MNIST8M (4 passes) >>>>>>>")
+val (mm7,opts7) = KMeans.learner(List((n:Int)=> ("../data/MNIST8M/parts/alls%02d.fmat.lz4" format n)), 256)
+opts7.npasses=4
+opts7.nend=70
+opts7.batchSize=100000
+opts7.useGPU=useGPU
+mm7.train
+}
+}
+
+if (useGPU && Mat.hasCUDA > 1) {
+println("\n<<<<<<< Testing parallel NMF on NYTimes (2 passes) >>>>>>>")
+val (mm8,opts8) = NMF.learnPar(a, 256)
+opts8.batchSize = 5000
+opts8.useGPU=useGPU
+opts8.npasses=2
+opts8.nthreads=Mat.hasCUDA
+mm8.train
+} else {
+println("\n<<<<<<< Testing NMF on NYTimes (2 passes) >>>>>>>")
+val (mm8,opts8) = NMF.learner(a, 128)
+opts8.batchSize = 5000
+opts8.useGPU=useGPU
+opts8.npasses=2
+mm8.train
+}
+
+val x = rand(32,1000000)           // A causal data matrix
+val b = rand(1,32) - 0.5f         // influence on the treatment
+val z = rand(1,33) - 0.5f         // influence on the outcome
+
+val bx = (b * x)
+val ilink = irow(1,1)
+GLM.preds(bx, bx, ilink, 10)
+val atreat = (rand(1, x.ncols) < bx)
+val xa = x on atreat
+val zx = z * xa
+GLM.preds(zx, zx, ilink, 10)
+val yout = (rand(1, x.ncols) < zx)
+val aa = xa on yout
+
+val targetmat = zeros(2,34)
+targetmat(0,32) = 1
+targetmat(1,33) = 1
+val mask = ones(2,34)
+mask(0,32) = 0
+mask(0,33) = 0
+mask(1,33) = 0
+
+println("\n<<<<<<< Testing IPTW estimators (10 passes) >>>>>>>")
+val (mm10,opts10) = IPTW.learner(aa)
+opts10.useGPU=useGPU
+opts10.targets = targetmat
+opts10.rmask = mask
+opts10.links = ilink
+opts10.useGPU = false
+opts10.npasses = 10
+mm10.train

@@ -1,0 +1,38 @@
+
+.SUFFIXES: 
+.SUFFIXES: .c .cpp .obj .exe .lxc .flex
+
+EXES=xmltweet.exe xmlwiki.exe trec.exe tparse.exe parsevw.exe tparse2.exe
+OBJS=newparse.obj utils.obj gzstream.obj
+
+.SECONDARY: xmltweet.lxc xmlwiki.lxc trec.lxc
+
+all: $(EXES)
+
+.flex.lxc: 
+	flex -o $@ $< 
+
+tparse.exe: gzstream.obj utils.obj tparse.obj utils.h
+	$(LD) tparse.obj utils.obj gzstream.obj $(LINK_OPTS) /OUT:tparse.exe
+
+tparse2.exe: gzstream.obj utils.obj tparse2.obj utils.h
+	$(LD) tparse2.obj utils.obj gzstream.obj $(LINK_OPTS) /OUT:tparse2.exe
+
+parsevw.exe: gzstream.obj utils.obj parsevw.obj utils.h
+	$(LD) parsevw.obj utils.obj gzstream.obj $(LINK_OPTS) /OUT:parsevw.exe
+
+.obj.exe: $(OBJS)
+	$(LD) $(OBJS) $< $(LINK_OPTS) /OUT:"$@"
+
+.cpp.obj: utils.h gzstream.h
+	$(CPP) $(CC_OPTS) /Fo"$@" /c $<
+
+.lxc.obj: 
+	$(CPP) $(CC_OPTS) /DYY_NO_UNISTD_H /Fo"$@" /c /Tc"$<"
+
+$(EXES): $(OBJS)
+
+gzstream.obj: gzstream.h
+
+clean:
+	rm -f $(EXES) *.obj *.lxc

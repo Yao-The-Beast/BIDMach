@@ -1,0 +1,76 @@
+Loading /Users/drtailor/Desktop/BIDMach/backup/lib/bidmach_init.scala...
+import BIDMat.{BMat, CMat, CSMat, DMat, Dict, FMat, GMat, GDMat, GIMat, GLMat, GSMat, GSDMat, HMat, IDict, Image, IMat, LMat, Mat, SMat, SBMat, SDMat, TMat}
+import BIDMat.MatFunctions._
+import BIDMat.SciFunctions._
+import BIDMat.Solvers._
+import BIDMat.Plotting._
+import BIDMach.{Learner, ParLearner}
+import BIDMach.models.{Click, FM, GLM, KMeans, KMeansw, LDA, LDAgibbs, Model, NMF, SFA, RandomForest, SVD}
+import BIDMach.networks.Net
+import BIDMach.datasources.{DataSource, MatSource, FileSource, SFileSource}
+import BIDMach.datasinks.{DataSink, MatSink}
+import BIDMach.mixins.{CosineSim, Perplexity, Top, L1Regularizer, L2Regularizer}
+import BIDMach.updaters.{ADAGrad, Batch, BatchNorm, Grad, IncMult, IncNorm, Telescoping, Updater}
+import BIDMach.causal.IPTW
+Couldn't load CUDA runtime
+
+Loading scripts/testAllReduceNode_2.scala...
+import BIDMach.allreduce._
+import scala.concurrent.duration._
+dimNum: Int = 2
+dataSize: Int = 100
+maxChunkSize: Int = 4
+roundNum: Int = 5
+threshold: BIDMach.allreduce.ThresholdConfig = ThresholdConfig(1.0,1.0,0.8)
+metaData: BIDMach.allreduce.MetaDataConfig = MetaDataConfig(100,4)
+nodeConfig: BIDMach.allreduce.NodeConfig = NodeConfig(2)
+workerConfig: BIDMach.allreduce.WorkerConfig = WorkerConfig(5 seconds,ThresholdConfig(1.0,1.0,0.8),MetaDataConfig(100,4))
+lineMasterConfig: BIDMach.allreduce.LineMasterConfig = LineMasterConfig(5,-1,20,5 seconds,ThresholdConfig(1.0,1.0,0.8),MetaDataConfig(100,4))
+res2: akka.actor.ActorRef = Actor[akka://ClusterSystem/user/Node#988912495]
+
+Welcome to Scala version 2.11.2 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_60).
+Type in expressions to have them evaluated.
+Type :help for more information.
+-----Node: DimensionNode dim:0 created with Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=0#-546898692]
+-----Node: DimensionNode dim:1 created with Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=1#-1929479503]
+
+scala> 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=4
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=4: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=4
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=4: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2: Thresholds: thReduce = 1.0, thComplete = 0.8
+
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0: Thresholds: thReduce = 1.0, thComplete = 0.8

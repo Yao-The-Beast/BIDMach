@@ -1,0 +1,172 @@
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0: Thresholds: thReduce = 1.0, thComplete = 0.8
+16:03:08 WARNING: Remote connection to [null] failed with java.net.ConnectException: Connection refused: /127.0.0.1:2552
+16:03:08 WARNING: Association with remote system [akka.tcp://ClusterSystem@127.0.0.1:2552] has failed, address is now gated for [5000] ms. Reason: [Association failed with [akka.tcp://ClusterSystem@127.0.0.1:2552]] Caused by: [Connection refused: /127.0.0.1:2552]
+16:03:08 INFO: Message [akka.cluster.InternalClusterAction$InitJoin$] from Actor[akka://ClusterSystem/system/cluster/core/daemon/joinSeedNodeProcess-1#-729641862] to Actor[akka://ClusterSystem/deadLetters] was not delivered. [1] dead letters encountered. This logging can be turned off or adjusted with configuration settings 'akka.log-dead-letters' and 'akka.log-dead-letters-during-shutdown'.
+16:03:09 INFO: Cluster Node [akka.tcp://ClusterSystem@127.0.0.1:54468] - Welcome from [akka.tcp://ClusterSystem@127.0.0.1:2551]
+16:03:13 INFO: 
+----LineMastervakka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Receive SlavesInfo from GridMaster.
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Preparing allreduce round 0
+16:03:13 INFO: 
+----LineMastervakka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Receive SlavesInfo from GridMaster.
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Preparing allreduce round 0
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0#109006659]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0: Preparing data round 0
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0: Prepared round 0
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0: Size of scatter buffer: 1 x 1 x 100. threshold : 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=0: Size of reduce buffer: 1 x 1 x 100. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: START ROUND 0--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0#-817713614]
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka.tcp://ClusterSystem@127.0.0.1:54473/user/Node/DimensionNode-dim=0/Worker-id=0#-1158810806]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0: Preparing data round 0
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0: Prepared round 0
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0: Size of scatter buffer: 1 x 2 x 50. threshold : 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=0: Size of reduce buffer: 1 x 2 x 50. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Node 0 completes allreduce round 0
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: 1 (out of 1) workers complete round 0
+
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Preparing allreduce round 1
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1#965055450]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1: Preparing data round 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1: Prepared round 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1: Size of scatter buffer: 1 x 1 x 100. threshold : 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=1: Size of reduce buffer: 1 x 1 x 100. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: START ROUND 1--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Node 0 completes allreduce round 1
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: 1 (out of 1) workers complete round 1
+
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Preparing allreduce round 2
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2#-661084712]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2: Preparing data round 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2: Prepared round 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2: Size of scatter buffer: 1 x 1 x 100. threshold : 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=2: Size of reduce buffer: 1 x 1 x 100. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: START ROUND 2--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Node 0 completes allreduce round 2
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: 1 (out of 1) workers complete round 2
+
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Preparing allreduce round 3
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3#-1135235429]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3: Preparing data round 3
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3: Prepared round 3
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3: Size of scatter buffer: 1 x 1 x 100. threshold : 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=1/Worker-id=3: Size of reduce buffer: 1 x 1 x 100. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: START ROUND 3--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=1/LineMaster: Node 0 completes allreduce round 3
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: START ROUND 0--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 0 completes allreduce round 0
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 1 completes allreduce round 0
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: 2 (out of 2) workers complete round 0
+
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Preparing allreduce round 1
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1#-1983572839]
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka.tcp://ClusterSystem@127.0.0.1:54473/user/Node/DimensionNode-dim=0/Worker-id=1#901277091]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1: Preparing data round 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1: Prepared round 1
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1: Size of scatter buffer: 1 x 2 x 50. threshold : 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=1: Size of reduce buffer: 1 x 2 x 50. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: START ROUND 1--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 0 completes allreduce round 1
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 1 completes allreduce round 1
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: 2 (out of 2) workers complete round 1
+
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Preparing allreduce round 2
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2#316091532]
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka.tcp://ClusterSystem@127.0.0.1:54473/user/Node/DimensionNode-dim=0/Worker-id=2#757584723]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2: Preparing data round 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2: Prepared round 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2: Size of scatter buffer: 1 x 2 x 50. threshold : 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=2: Size of reduce buffer: 1 x 2 x 50. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: START ROUND 2--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 0 completes allreduce round 2
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 1 completes allreduce round 2
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: 2 (out of 2) workers complete round 2
+
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Preparing allreduce round 3
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3#-1946698974]
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Sending prepare msg to worker Actor[akka.tcp://ClusterSystem@127.0.0.1:54473/user/Node/DimensionNode-dim=0/Worker-id=3#-617363628]
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3: Preparing data round 3
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3: Prepared round 3
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3: Size of scatter buffer: 1 x 2 x 50. threshold : 2
+16:03:13 INFO: 
+----Worker akka://ClusterSystem/user/Node/DimensionNode-dim=0/Worker-id=3: Size of reduce buffer: 1 x 2 x 50. threshold: 20
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: START ROUND 3--------------------
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 0 completes allreduce round 3
+16:03:13 INFO: 
+----LineMaster akka://ClusterSystem/user/Node/DimensionNode-dim=0/LineMaster: Node 1 completes allreduce round 3
+

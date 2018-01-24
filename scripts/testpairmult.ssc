@@ -1,0 +1,125 @@
+import edu.berkeley.bid.CUMACH
+
+val nr = 1;
+val nc = 200;
+val kk = 1000000;
+val nrows = nr + 10;
+val ncols = nc + 10;
+val kcols = kk * 2;
+
+val aroff = 0;
+val acoff = 0;
+val broff = 0;
+val bcoff = 0;
+val croff = 0;
+val ccoff = 0;
+
+val a = rand(nrows, kcols * 2);
+//val a = ones(nrows,1)*row(1->(kcols*2+1));
+val b = powrand(kcols, ncols, 30);
+val sb = sum(b > 0);
+val nt = sb dotr sb;
+
+val c = zeros(nrows, ncols);
+val d = zeros(nrows, ncols);
+val e = zeros(nrows, ncols);
+
+GLM.pairMult(nr, nc, kk, a, aroff, acoff,  b, broff, bcoff, c, croff, ccoff);
+
+val inds = irow(0->kcols) * 2;
+val a0 = a(?,inds);
+
+val aa=a.copy;
+aa(?,inds+1) = 0;
+
+val ga = GMat(aa);
+val gb = GSMat(b);
+val gd = GMat(d);
+
+flip;
+for (i<- 0 until 1) {
+GLM.pairMult(nr, nc, kk, aa, aroff, acoff,  b, broff, bcoff, d, croff, ccoff);
+}
+val gf=gflop;
+
+flip;
+for (i<- 0 until 1) {
+GLM.pairMult(nr, nc, kk, ga, aroff, acoff,  gb, broff, bcoff, gd, croff, ccoff);
+}
+val gf1=gflop;
+
+flip;
+a0.tileMult(nr, nc, kk, aroff, acoff, b, broff, bcoff, e, croff, ccoff);
+val gf2=gflop
+
+val fd = FMat(gd);
+
+maxi(maxi(abs(d-e)));
+
+maxi(maxi(abs(fd-d))); 
+ 
+(gf._2, gf1._2)
+
+val gaa = grand(nrows, ncols)
+val aa=FMat(gaa);
+val gc = GMat(c);
+val gmod = gzeros(nr, kcols);
+val gmod2 = gzeros(nrows, kcols * 2);
+val gmod3 = gzeros(nrows, kcols * 2);
+val gmode = gzeros(nr, kcols);
+val gsumsq = gones(nr, kcols);
+val glrate = gones(1,1);
+val gvexp = gzeros(1,1);
+val gtexp = gones(1,1);
+
+CUMACH.pairMultADAGradTile(nr, nc, kk, kk, gc.data, gc.nrows, 0, 0, gb.data, gb.ir, gb.jc,
+    0, 0, 1, gmod.data, gmod.nrows, gsumsq.data, null, 0, glrate.data, glrate.length,
+    gvexp.data, gvexp.length, gtexp.data, gtexp.length, 1, 1, 1e-6f);
+
+val tiley = 2;
+val tilex = 3;
+val tilex2 = tilex;
+
+val ce = zeros(tiley, c.ncols) on c;
+val gce = GMat(ce);
+
+val be = spzeros(tilex, b.ncols) on b;
+val gbe = GSMat(be);
+
+CUMACH.pairMultADAGradTile(nr, nc, kk, kk, gce.data, gce.nrows, tiley, 0, gbe.data, gbe.ir, gbe.jc,
+    tilex2, 0, 1, gmode.data, gmode.nrows, gsumsq.data, null, 0, glrate.data, glrate.length,
+    gvexp.data, gvexp.length, gtexp.data, gtexp.length, 1, 1, 1e-6f);
+
+GLM.pairMultNT(nr, kk, nc, gc, 0, 0,  gb, 0, 0, gmod2, 0, 0);
+
+gc.tileMultNT(nr, kk, nc, 0, 0,  gb, 0, 0, gmod3, 0, 0);
+
+val mod4 = aa(0->10,0->10)*^b(0->10,0->10);
+
+nt * 200f * nr / gf1._2 / 1e9f;
+
+def paire(x:Int, y:Int):Long = {
+val a = glzeros(1,1);
+CUMACH.pairembed(GIMat(irow(x)).data, GIMat(irow(y)).data, a.data, 1)
+a(0,0);
+};
+
+val n = 1024;
+val ir = icol(0->n) * iones(1,n);
+val ic = iones(n,1) * irow(0->n);
+val ares = glzeros(n,n);
+
+CUMACH.pairembed(GIMat(ir).data, GIMat(ic).data, ares.data, n*n);
+
+val res=IMat(LMat(ares));
+val x = izeros(1, n*(n-1)/2);
+var i = 0;
+for (j <- 0 until n) {
+    for (k <- 0 until j) {
+	x(i) = res(j, k);
+	i += 1;
+    }
+}
+
+val xs=sort(x);
+float(sum(x < n))/n

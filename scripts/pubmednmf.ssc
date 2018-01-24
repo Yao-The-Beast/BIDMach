@@ -1,0 +1,14 @@
+val dir = "../data/uci/"
+
+val (nn, opts) = NMF.learner(dir + "pubmed_parts/part%02d.smat.lz4", 256);
+
+opts.nend = 9;
+opts.eltsPerSample = 400
+
+opts.batchSize = 20000;
+opts.npasses = 3;
+
+val dict = Dict(loadSBMat(dir+"pubmed.term.sbmat.gz"))
+
+nn.train
+
