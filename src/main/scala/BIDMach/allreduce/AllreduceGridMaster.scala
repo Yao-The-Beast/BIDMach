@@ -64,14 +64,27 @@ class AllreduceGridMaster(config: MasterConfig) extends Actor with akka.actor.Ac
     }
   }
 
+  /*
+  0 1
+  2 3
+  */
   private def generateLineMasters() : Unit = {
-    lineMastersAssignment = lineMastersAssignment.updated(0, ArrayBuffer((0, ArrayBuffer(0,1)), (1, ArrayBuffer(0))))
-    lineMastersAssignment = lineMastersAssignment.updated(1, ArrayBuffer(((1, ArrayBuffer(1)))))
-    //debug use only
-    if (nodeMap.size > nodeMap.size){
-    	lineMastersAssignment = lineMastersAssignment.updated(0, ArrayBuffer((0, ArrayBuffer(0,1,2)), (1, ArrayBuffer(0))))
-    	lineMastersAssignment = lineMastersAssignment.updated(2, ArrayBuffer(((1, ArrayBuffer(2)))))
-    }
+    //config 1
+    // lineMastersAssignment = lineMastersAssignment.updated(0, ArrayBuffer((0, ArrayBuffer(0, 1)), (1, ArrayBuffer(0,2))))
+    // lineMastersAssignment = lineMastersAssignment.updated(3, ArrayBuffer((0, ArrayBuffer(2, 3)), (1, ArrayBuffer(1,3))))
+
+    //config 2
+    lineMastersAssignment = lineMastersAssignment.updated(0, ArrayBuffer((0, ArrayBuffer(0, 1))))
+    lineMastersAssignment = lineMastersAssignment.updated(1, ArrayBuffer((1, ArrayBuffer(1, 3))))
+    lineMastersAssignment = lineMastersAssignment.updated(2, ArrayBuffer((1, ArrayBuffer(0, 2))))
+    lineMastersAssignment = lineMastersAssignment.updated(3, ArrayBuffer((0, ArrayBuffer(2, 3))))
+
+
+    // debug use only
+    // if (nodeMap.size > nodeMap.size){
+    // 	lineMastersAssignment = lineMastersAssignment.updated(0, ArrayBuffer((0, ArrayBuffer(0,1,2)), (1, ArrayBuffer(0))))
+    // 	lineMastersAssignment = lineMastersAssignment.updated(2, ArrayBuffer(((1, ArrayBuffer(2)))))
+    // }
 
   }
 
@@ -112,7 +125,7 @@ object AllreduceGridMaster {
   }
 
   private def initMaster(port: String, masterConfig: MasterConfig) = {
-    val config = ConfigFactory.parseString(s"\nakka.remote.netty.tcp.port=$port").
+    val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port").
       withFallback(ConfigFactory.parseString("akka.cluster.roles = [GridMaster]")).
       withFallback(ConfigFactory.load())
 

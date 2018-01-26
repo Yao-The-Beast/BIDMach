@@ -34,9 +34,10 @@ class AllreduceLineMaster(config: LineMasterConfig) extends Actor with akka.acto
   def receive = {
 
     case confirm: ConfirmPreparation => {
+      //log.info(s"\n----LineMaster ${self.path} receive confimation from ${sender} with round ${confirm.round}");
       if (confirm.round == round) {
         confirmPrepareCount += 1
-        log.info(s"\n----LineMaster ${self.path} receive confimation from ${sender}")
+        //log.info(s"\n----LineMaster ${self.path} receive confimation from ${sender}; ${confirmPrepareCount} out of ${workerNum}")
         if (confirmPrepareCount == workerNum) {
           startAllreduce()
         }
@@ -44,11 +45,11 @@ class AllreduceLineMaster(config: LineMasterConfig) extends Actor with akka.acto
     }
 
     case c : CompleteAllreduce =>
-      log.info(s"\n----LineMaster ${self.path}: Node ${c.srcId} completes allreduce round ${c.round}")
+      //log.info(s"\n----LineMaster ${self.path}: Node ${c.srcId} completes allreduce round ${c.round}")
       if (c.round == round) {
         completeCount += 1
         if (completeCount >= workerNum * thAllreduce && round < maxRound) {
-          log.info(s"\n----LineMaster ${self.path}: ${completeCount} (out of ${workerNum}) workers complete round ${round}\n")
+          //log.info(s"\n----LineMaster ${self.path}: ${completeCount} (out of ${workerNum}) workers complete round ${round}\n")
           round += 1
           prepareAllreduce()
         }
@@ -68,7 +69,7 @@ class AllreduceLineMaster(config: LineMasterConfig) extends Actor with akka.acto
   }
 
   private def startAllreduce() = {
-    log.info(s"\n----LineMaster ${self.path}: START ROUND ${round}--------------------")
+    log.info(s"\n----LineMaster ${self.path}: START ROUND ${round} at time ${System.currentTimeMillis} --------------------")
     completeCount = 0
     for (worker <- workerMap.values) {
       worker ! StartAllreduce(round)
@@ -76,12 +77,12 @@ class AllreduceLineMaster(config: LineMasterConfig) extends Actor with akka.acto
   }
 
   private def prepareAllreduce() = {
-    log.info(s"\n----LineMaster ${self.path}: Preparing allreduce round ${round}")
+    //log.info(s"\n----LineMaster ${self.path}: Preparing allreduce round ${round}")
     confirmPrepareCount = 0
     workerNum = nodeMap.size
     workerMap = discoverWorkers(round, nodeMap)
     for ((nodeIndex, worker) <- workerMap) {
-      log.info(s"\n----LineMaster ${self.path}: Sending prepare msg to worker $worker")
+      //log.info(s"\n----LineMaster ${self.path}: Sending prepare msg to worker $worker")
       worker ! PrepareAllreduce(round, workerMap, nodeIndex)
     }
   }
