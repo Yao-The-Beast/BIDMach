@@ -2,9 +2,12 @@ Add Grid Topology into the code.
 
 Current configuration: 
 1 GridMaster
+
 4 nodes with 2 dimensions
+
 0 (row master) 1 (column master)
-2 (column master) 2 (row master)
+
+2 (column master) 3 (row master)
 
 How to Run:
 #Run gridmaster
